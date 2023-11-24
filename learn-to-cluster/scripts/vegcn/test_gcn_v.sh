@@ -1,4 +1,4 @@
-config=vegcn/configs/cfg_test_gcnv_test.py
+config=vegcn/configs/cfg_test_gcnv.py
 load_from=data/pretrained_models/pretrained_gcn_v_ms1m.pth
 
 export CUDA_VISIBLE_DEVICES=0

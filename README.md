@@ -36,8 +36,8 @@ python input_totxt.py input.json
 0-3. GCN-V+E의 Pretrained Model을 다운받아 줍니다.
 
 ```bash
-cd ../learn-to-cluster
-python tools/download_data.py`
+cd learn-to-cluster
+python tools/download_data.py
 ```
 
 1. Face Recognition
