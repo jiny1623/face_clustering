@@ -107,3 +107,4 @@ ENV/
 input.json
 output.json
 filelist.txt
+*.pth.tar
