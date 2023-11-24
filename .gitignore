@@ -101,3 +101,9 @@ ENV/
 .mypy_cache/
 
 .DS_Store
+
+*.tar.gz
+
+input.json
+output.json
+filelist.txt

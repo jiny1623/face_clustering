@@ -1,1 +1,89 @@
-# face_clustering
+# Face Clustering 추론 코드
+## 입/출력 양식
+* 입력: 각 이미지에 대해 face detection 모델이 추론한 Face Patch 모양대로 crop된 img
+```json
+[
+    {
+        "img_path": "/home/rippleai/data/video1/0001.png"
+    },
+
+    ...
+]
+```
+
+* 출력: cluster id 정보가 추가된 json
+```json
+[
+    {
+        "img_path": "/home/rippleai/data/video1/0001.png", 
+				"cluster_id": 3
+    },
+
+    ...
+]
+```
+
+## Inference
+
+0-1. 입력 json 파일을 통해 filelist.txt 를 만들어줍니다.
+
+```bash
+python input_totxt.py input.json
+```
+
+0-2. [GoogleDrive](https://drive.google.com/file/d/1eKsh7x-RUIHhIJ1R9AlUjsJdsdbh2qim/view?pli=1) 에서 Pretrained Model을 다운받아, `hfsoftmax/ckpt`에 넣어줍니다.
+
+0-3. GCN-V+E의 Pretrained Model을 다운받아 줍니다.
+
+```bash
+cd ../learn-to-cluster
+python tools/download_data.py`
+```
+
+1. Face Recognition
+
+```bash
+conda create -n recognition python=3.6
+conda activate recognition
+conda install pytorch==1.7.0 torchvision==0.8.0 torchaudio==0.7.0 cudatoolkit=9.2 -c pytorch
+cd hfsoftmax
+pip install -r requirements.txt
+
+# arguments : prefix file_list ckpt_path output_path
+sh ./scripts/extract_feat.sh prefix ../filelist.txt ckpt/resnet50_part0_train.pth.tar ../learn-to-cluster/data/features/test.bin
+```
+
+2. Clustering
+
+```bash
+conda create -n gcn_v+e python=3.7
+conda activate gcn_v+e
+pip install torch==1.2.0 torchvision==0.4.0
+pip install faiss-gpu
+pip install -r requirements.txt
+pip install pillow==6.2.1
+pip install cmake
+pip install -U openmim
+mim install mmcv==1.3.3
+
+# config : vegcn/configs/cfg_test_gcnv.py
+# config의 test_name은 Face_Recognition에서 output_path의 bin file 이름과 동일해야 합니다. 
+sh scripts/vegcn/test_gcn_v.sh
+# config : vegcn/configs/cfg_test_gcne.py
+sh scripts/vegcn/test_gcn_e.sh
+```
+
+3. save된 label을 통하여 output.json 을 생성합니다.
+
+```bash
+cd ..
+# config : filelist.txt pred_labels.txt
+python construct_output.py filelist.txt learn-to-cluster/data/work_dir/cfg_test_gcne/test_gcne_k_160_th_0.0_ig_0/tau_0.8_pred_labels.txt
+```
+
+
+### Debugging
+
+1. gcn_v+e 적용 시 config에서 knn이, node의 개수 (=input jpg의 개수) 보다 많으면 오류가 발생합니다.
+2. `AssertionError: 0 vs 1` 가 뜨는 경우는 주로 input jpg의 개수가 적을 때 `ignore_ratio=0.8` 에 의하여 모든 vertices가 무시되는 경우입니다. `ignore_ratio=0`으로 config file을 수정하시면 잘 작동합니다.
+
