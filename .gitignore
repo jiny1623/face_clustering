@@ -108,3 +108,4 @@ input.json
 output.json
 filelist.txt
 *.pth.tar
+file.npy
