@@ -5,7 +5,7 @@ import json
 
 filelist_path = sys.argv[1]
 pred_labels = sys.argv[2]
-output_path = 'output.json'
+output_path = 'output_gcn_v+e.json'
 
 # with open(json_path) as f:
 #     data = json.load(f)
