@@ -26,8 +26,8 @@ with open(pred_labels, 'r') as l:
     for line in l:
         cluster_id.append((int)(line.strip()))
 
-print(img_path)
-print(cluster_id)
+# print(img_path)
+# print(cluster_id)
 
 output = []
 
@@ -40,4 +40,4 @@ for i in range(len(img_path)):
 with open(output_path, 'w') as json_file:
     json.dump(output, json_file, indent=4)
 
-print(output)
+# print(output)

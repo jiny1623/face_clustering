@@ -79,13 +79,14 @@ sh scripts/vegcn/test_gcn_e.sh
 ```bash
 cd ..
 # config : filelist.txt pred_labels.txt
-python construct_output.py filelist.txt learn-to-cluster/data/work_dir/cfg_test_gcne/test_gcne_k_160_th_0.0_ig_0/tau_0.8_pred_labels.txt
+python construct_output.py filelist.txt learn-to-cluster/data/work_dir/cfg_test_gcne/test_gcne_k_160_th_0.0_ig_0.8/tau_0.8_pred_labels.txt
 ```
 
 ## Ada-NETS
 
 0~1 과정은 GCN_V+E와 동일합니다.
 (다른 점은, 0-3 과정과, 마지막에 extract_feat.sh 실행 시 output_path를 알맞게 수정해주는 것 이외엔 없습니다.)
+
 ex. `sh ./scripts/extract_feat.sh prefix ../filelist.txt ckpt/resnet50_part0_train.pth.tar ../Ada-NETS/data/feature/test.bin`
 
 0-1. 입력 json 파일을 통해 filelist.txt 를 만들어줍니다.
@@ -108,7 +109,7 @@ cd hfsoftmax
 pip install -r requirements.txt
 
 # arguments : prefix file_list ckpt_path output_path
-sh ./scripts/extract_feat.sh prefix ../filelist.txt ckpt/resnet50_part0_train.pth.tar ../Ada-NETS/data/features/test.bin
+sh ./scripts/extract_feat.sh prefix ../filelist.txt ckpt/resnet50_part0_train.pth.tar ../Ada-NETS/data/feature/test.bin
 ```
 
 
